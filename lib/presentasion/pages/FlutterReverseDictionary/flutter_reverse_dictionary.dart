@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_playground/presentasion/pages/FlutterReverseDictionary/process_when_copme_back_from_a_pop.dart';
 import 'package:flutter_playground/presentasion/pages/FlutterReverseDictionary/want_to_do_hot_reload_in_dialog.dart';
 
 class FlutterReverseDictionary extends StatelessWidget {
@@ -20,6 +21,15 @@ class FlutterReverseDictionary extends StatelessWidget {
                 ),
               ),
               child: const Text('want to do hot reload in dialog'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProcessWhenComeBackFromAPop(),
+                ),
+              ),
+              child: const Text('process when come back from a pop'),
             ),
           ],
         ),
