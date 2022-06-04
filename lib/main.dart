@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_playground/presentasion/pages/flutter_reverse_dictionary.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,12 +23,22 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Flutter PlayGround'),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-                onPressed: () {}, child: Text('Flutter Reverse Dictionary')),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FlutterReverseDictionary(),
+                ),
+              ),
+              child: const Text('Flutter Reverse Dictionary'),
+            ),
           ],
         ),
       ),
