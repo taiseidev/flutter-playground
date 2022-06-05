@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_playground/presentasion/pages/FlutterReverseDictionary/navigator_in_dialog.dart';
 import 'package:flutter_playground/presentasion/pages/FlutterReverseDictionary/process_when_copme_back_from_a_pop.dart';
 import 'package:flutter_playground/presentasion/pages/FlutterReverseDictionary/strint_to_enum.dart';
 import 'package:flutter_playground/presentasion/pages/FlutterReverseDictionary/want_to_do_hot_reload_in_dialog.dart';
@@ -10,12 +11,6 @@ class FlutterReverseDictionary extends StatefulWidget {
 }
 
 class _FlutterReverseDictionaryState extends State<FlutterReverseDictionary> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,6 +47,15 @@ class _FlutterReverseDictionaryState extends State<FlutterReverseDictionary> {
                 ),
               ),
               child: const Text('Strint to enum'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NavigatorInDialog(),
+                ),
+              ),
+              child: const Text('navigator in dialog'),
             ),
           ],
         ),
