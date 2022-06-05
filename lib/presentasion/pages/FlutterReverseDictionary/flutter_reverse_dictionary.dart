@@ -62,7 +62,7 @@ class _FlutterReverseDictionaryState extends State<FlutterReverseDictionary> {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Singleton(),
+                  builder: (context) => SingletonTest(),
                 ),
               ),
               child: const Text('singleton'),
