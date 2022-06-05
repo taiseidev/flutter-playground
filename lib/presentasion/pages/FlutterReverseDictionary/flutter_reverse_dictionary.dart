@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/presentasion/pages/FlutterReverseDictionary/navigator_in_dialog.dart';
 import 'package:flutter_playground/presentasion/pages/FlutterReverseDictionary/process_when_copme_back_from_a_pop.dart';
+import 'package:flutter_playground/presentasion/pages/FlutterReverseDictionary/singleton.dart';
 import 'package:flutter_playground/presentasion/pages/FlutterReverseDictionary/strint_to_enum.dart';
 import 'package:flutter_playground/presentasion/pages/FlutterReverseDictionary/want_to_do_hot_reload_in_dialog.dart';
 
@@ -61,7 +62,7 @@ class _FlutterReverseDictionaryState extends State<FlutterReverseDictionary> {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NavigatorInDialog(),
+                  builder: (context) => Singleton(),
                 ),
               ),
               child: const Text('singleton'),
