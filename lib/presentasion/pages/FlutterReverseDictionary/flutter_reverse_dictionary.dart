@@ -57,6 +57,15 @@ class _FlutterReverseDictionaryState extends State<FlutterReverseDictionary> {
               ),
               child: const Text('navigator in dialog'),
             ),
+            ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NavigatorInDialog(),
+                ),
+              ),
+              child: const Text('singleton'),
+            ),
           ],
         ),
       ),
