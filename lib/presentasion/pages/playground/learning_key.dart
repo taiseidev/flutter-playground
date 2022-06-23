@@ -59,8 +59,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: changeTiles,
-        child: Icon(Icons.add),
+        onPressed: () => Navigator.push(
+            context, MaterialPageRoute(builder: ((context) => ListPage()))),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -91,6 +92,74 @@ class _StatefulTileState extends State<StatefulTile> {
       color: _color,
       height: 100,
       width: 100,
+    );
+  }
+}
+
+// keyでスクロールした場所の状態を保持している
+class ListPage extends StatefulWidget {
+  final title = 'List Key Smaple';
+  @override
+  State<ListPage> createState() => _ListPageState();
+}
+
+class _ListPageState extends State<ListPage> {
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      initialIndex: 0,
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+          bottom: const TabBar(
+            tabs: <Widget>[
+              Tab(
+                child: Text('Tab-1'),
+              ),
+              Tab(
+                child: Text('Tab-2'),
+              ),
+            ],
+          ),
+        ),
+        body: TabBarView(
+          children: <Widget>[
+            // PageStorageKeyを指定しないと再描画されて元の位置に戻ってしまう
+            //_TabPage(tab: 0),
+            //_TabPage(tab: 1),
+            // PageStorageKeyを利用してStateを保存するパターン
+            _TabPage(key: const PageStorageKey(0), tab: 0),
+            _TabPage(key: const PageStorageKey(1), tab: 1),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TabPage extends StatefulWidget {
+  _TabPage({
+    required Key key,
+    required this.tab,
+  }) : super(key: key);
+
+  final int tab;
+
+  @override
+  _TabPageState createState() => _TabPageState();
+}
+
+class _TabPageState extends State<_TabPage> {
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: 100,
+      itemBuilder: (BuildContext context, int index) {
+        return ListTile(
+          title: Text('${widget.tab}: Item $index'),
+        );
+      },
     );
   }
 }
