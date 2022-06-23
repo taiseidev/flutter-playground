@@ -48,6 +48,15 @@ class MyHomePage extends StatelessWidget {
               ),
               child: const Text('Hero'),
             ),
+            ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FlutterReverseDictionary(),
+                ),
+              ),
+              child: const Text('key'),
+            ),
           ],
         ),
       ),
