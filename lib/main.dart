@@ -53,7 +53,7 @@ class MyHomePage extends StatelessWidget {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => LearningKey(),
+                  builder: (context) => MyKeyApp(),
                 ),
               ),
               child: const Text('key'),
