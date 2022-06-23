@@ -29,8 +29,12 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     //2つのStatefulWidgetが準備
     tiles = [
-      StatefulTile(),
-      StatefulTile(),
+      StatefulTile(
+        key: UniqueKey(),
+      ),
+      StatefulTile(
+        key: UniqueKey(),
+      ),
     ];
   }
 
@@ -41,6 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+// keyを指定していないとbuildそのものは行われているが、Widget-Element間の紐付けが更新されない。
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +60,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: changeTiles,
-        tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
     );
