@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_playground/presentasion/pages/FlutterReverseDictionary/flutter_reverse_dictionary.dart';
 import 'package:flutter_playground/presentasion/pages/playground/learning_key.dart';
 
+import 'presentasion/pages/playground/list_store_location.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -62,7 +64,7 @@ class MyHomePage extends StatelessWidget {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MyKeyApp(),
+                  builder: (context) => ListStoreLocation(),
                 ),
               ),
               child: const Text('storeListLocation'),
