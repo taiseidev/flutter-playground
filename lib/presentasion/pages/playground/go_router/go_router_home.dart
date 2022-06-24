@@ -12,7 +12,7 @@ class GoRouterHome extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
             // context.go('/1')でも挙動は同じ
-            onPressed: () => GoRouter.of(context).go('/1'),
+            onPressed: () => context.push('/1'),
             child: const Text('1画面に遷移')),
       ),
     );
