@@ -20,6 +20,8 @@ class GoRouterSample extends StatelessWidget {
 
   final _router = GoRouter(
     initialLocation: '/',
+    // webの#を削除
+    urlPathStrategy: UrlPathStrategy.path,
     routes: [
       GoRoute(
         path: '/',
