@@ -58,6 +58,15 @@ class MyHomePage extends StatelessWidget {
               ),
               child: const Text('key'),
             ),
+            ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MyKeyApp(),
+                ),
+              ),
+              child: const Text('Go_router'),
+            ),
           ],
         ),
       ),
