@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/presentasion/pages/playground/go_router/go_router1.dart';
+import 'package:flutter_playground/presentasion/pages/playground/go_router/go_router_error_page.dart';
 import 'package:flutter_playground/presentasion/pages/playground/go_router/go_router_home.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,5 +30,8 @@ class GoRouterSample extends StatelessWidget {
         builder: (context, state) => GoRouter1(),
       ),
     ],
+    errorBuilder: (context, state) => GoRouterErrorPage(
+      message: state.error.toString(),
+    ),
   );
 }
