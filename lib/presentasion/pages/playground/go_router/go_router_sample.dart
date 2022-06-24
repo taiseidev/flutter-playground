@@ -17,14 +17,17 @@ class GoRouterSample extends StatelessWidget {
         routerDelegate: _router.routerDelegate,
       );
 
-  final _router = GoRouter(routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => GoRouterHome(),
-    ),
-    GoRoute(
-      path: '/1',
-      builder: (context, state) => GoRouter1(),
-    ),
-  ]);
+  final _router = GoRouter(
+    initialLocation: '/',
+    routes: [
+      GoRoute(
+        path: '/',
+        builder: (context, state) => GoRouterHome(),
+      ),
+      GoRoute(
+        path: '/1',
+        builder: (context, state) => GoRouter1(),
+      ),
+    ],
+  );
 }
