@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_playground/presentasion/pages/FlutterReverseDictionary/flutter_reverse_dictionary.dart';
 import 'package:flutter_playground/presentasion/pages/playground/go_router/main.dart';
 import 'package:flutter_playground/presentasion/pages/playground/learning_key.dart';
+import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  GetIt.I
+    ..registerSingleton(Count(5))
+    ..registerSingleton(await SharedPreferences.getInstance());
+  runApp(GoRouterSample());
 }
 
 class MyApp extends StatelessWidget {
@@ -16,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+      home: GoRouterSample(),
     );
   }
 }
