@@ -14,10 +14,10 @@ class SignInPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextFormField(),
-            TextFormField(),
+            // TextFormField(),
+            // TextFormField(),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () => context.go('/home'),
               child: Text('ログイン'),
             ),
           ],

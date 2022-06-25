@@ -18,7 +18,7 @@ class SignUpPage extends StatelessWidget {
             TextFormField(),
             TextFormField(),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () => context.go('/home'),
               child: Text('ログイン'),
             ),
           ],

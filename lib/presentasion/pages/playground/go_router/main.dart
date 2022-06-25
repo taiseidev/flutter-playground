@@ -7,16 +7,20 @@ import 'package:flutter_playground/presentasion/pages/playground/go_router/sign_
 import 'package:flutter_playground/presentasion/pages/playground/go_router/top_page.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  GetIt.I.registerSingleton(TestNotifier(5));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // シングルトンクラスを登録
+  GetIt.I
+    ..registerSingleton(TestNotifier(5))
+    ..registerSingleton(await SharedPreferences.getInstance());
   runApp(
     GoRouterSample(),
   );
 }
 
 class GoRouterSample extends StatelessWidget {
-  GoRouterSample({Key? key}) : super(key: key);
   final testNotifierRepository = GetIt.I<TestNotifier>();
 
   @override
@@ -66,6 +70,14 @@ class GoRouterSample extends StatelessWidget {
     ),
     // ナビゲーションイベントが起こるたびに発火している
     redirect: (state) {
+      if (state.subloc == '/home') {
+        final prefs = GetIt.I<SharedPreferences>();
+        if (prefs.getBool('isFirst') == null) {
+          prefs.setBool('isFirst', true);
+          return '/first';
+        }
+      }
+
       if (testNotifierRepository.value == 0) {
         testNotifierRepository.resetCount();
         return '/home';
@@ -87,9 +99,3 @@ class TestNotifier extends ValueNotifier<int> {
     value = 5;
   }
 }
-
-// アプリの構成
-// ログイン機能
-// 未ログインの場合はログイン画面に遷移
-// ログイン済みの場合はホーム画面に遷移
-// 初回ログインの場合は説明画面を表示
