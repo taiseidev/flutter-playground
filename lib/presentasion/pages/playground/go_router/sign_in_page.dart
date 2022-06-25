@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class GoRouter1 extends StatelessWidget {
+class SignInPage extends StatelessWidget {
+  const SignInPage({Key? key}) : super(key: key);
+
   Future<bool> abandonNewPerson(BuildContext context) async {
     final bool result = await showDialog(
       context: context,
