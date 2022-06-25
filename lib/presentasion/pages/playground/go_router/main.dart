@@ -16,6 +16,7 @@ void main() {
 }
 
 class GoRouterSample extends StatelessWidget {
+  GoRouterSample({Key? key}) : super(key: key);
   final testNotifierRepository = GetIt.I<TestNotifier>();
 
   @override
@@ -26,7 +27,7 @@ class GoRouterSample extends StatelessWidget {
       );
 
   late final _router = GoRouter(
-    initialLocation: '/first',
+    initialLocation: '/',
     // webの#を削除
     urlPathStrategy: UrlPathStrategy.path,
     // ルート診断情報の出力を有効にする
@@ -69,6 +70,8 @@ class GoRouterSample extends StatelessWidget {
         testNotifierRepository.resetCount();
         return '/home';
       }
+      // nullを返すと本来の遷移先に遷移してくれる
+      return null;
     },
   );
 }
@@ -77,11 +80,11 @@ class TestNotifier extends ValueNotifier<int> {
   TestNotifier(super.value);
 
   void countDown() {
-    this.value = value - 1;
+    value = value - 1;
   }
 
   void resetCount() {
-    this.value = 5;
+    value = 5;
   }
 }
 
