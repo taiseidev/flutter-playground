@@ -13,7 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // シングルトンクラスを登録
   GetIt.I
-    ..registerSingleton(TestNotifier(5))
+    ..registerSingleton(Count(5))
     ..registerSingleton(await SharedPreferences.getInstance());
   runApp(
     GoRouterSample(),
@@ -21,7 +21,8 @@ void main() async {
 }
 
 class GoRouterSample extends StatelessWidget {
-  final testNotifierRepository = GetIt.I<TestNotifier>();
+  GoRouterSample({Key? key}) : super(key: key);
+  final countRepository = GetIt.I<Count>();
 
   @override
   Widget build(BuildContext context) => MaterialApp.router(
@@ -31,13 +32,11 @@ class GoRouterSample extends StatelessWidget {
       );
 
   late final _router = GoRouter(
-    initialLocation: '/',
-    // webの#を削除
-    urlPathStrategy: UrlPathStrategy.path,
+    initialLocation: '/signIn',
     // ルート診断情報の出力を有効にする
     debugLogDiagnostics: true,
     // Listenableに変化があればルーターによってルートがリフレッシュされる。
-    refreshListenable: testNotifierRepository,
+    refreshListenable: countRepository,
     // 10回までリダイレクトを許容する（無限ループを制限）
     redirectLimit: 10,
     routes: [
@@ -68,7 +67,7 @@ class GoRouterSample extends StatelessWidget {
     errorBuilder: (context, state) => ErrorPage(
       message: state.error.toString(),
     ),
-    // ナビゲーションイベントが起こるたびに発火している
+    // ナビゲーションイベントが起こるたびに発火
     redirect: (state) {
       if (state.subloc == '/home') {
         final prefs = GetIt.I<SharedPreferences>();
@@ -78,8 +77,8 @@ class GoRouterSample extends StatelessWidget {
         }
       }
 
-      if (testNotifierRepository.value == 0) {
-        testNotifierRepository.resetCount();
+      if (countRepository.value == 0) {
+        countRepository.resetCount();
         return '/home';
       }
       // nullを返すと本来の遷移先に遷移してくれる
@@ -88,8 +87,8 @@ class GoRouterSample extends StatelessWidget {
   );
 }
 
-class TestNotifier extends ValueNotifier<int> {
-  TestNotifier(super.value);
+class Count extends ValueNotifier<int> {
+  Count(super.value);
 
   void countDown() {
     value = value - 1;

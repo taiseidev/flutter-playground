@@ -5,23 +5,21 @@ import 'package:flutter_playground/presentasion/pages/playground/go_router/main.
 import 'package:get_it/get_it.dart';
 
 class FirstSignInPage extends StatefulWidget {
-  FirstSignInPage({Key? key}) : super(key: key);
+  const FirstSignInPage({Key? key}) : super(key: key);
 
   @override
   State<FirstSignInPage> createState() => _FirstSignInPageState();
 }
 
 class _FirstSignInPageState extends State<FirstSignInPage> {
-  final count = GetIt.I<TestNotifier>();
+  final count = GetIt.I<Count>();
   late Timer _timer;
 
   @override
   void initState() {
     super.initState();
     _timer = Timer.periodic(
-      // 第一引数：繰り返す間隔の時間を設定
       const Duration(seconds: 1),
-      // 第二引数：その間隔ごとに動作させたい処理を書く
       (Timer timer) {
         count.countDown();
         setState(() {});
@@ -42,7 +40,7 @@ class _FirstSignInPageState extends State<FirstSignInPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('初回ログイン画面'),
+            const Text('初回ログイン'),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
