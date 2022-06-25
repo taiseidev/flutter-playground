@@ -10,6 +10,7 @@ void main() {
 
 class GoRouterSample extends StatelessWidget {
   GoRouterSample({Key? key}) : super(key: key);
+  final loginInfo = LoginInfo();
 
   @override
   Widget build(BuildContext context) => MaterialApp.router(
@@ -18,7 +19,7 @@ class GoRouterSample extends StatelessWidget {
         routerDelegate: _router.routerDelegate,
       );
 
-  final _router = GoRouter(
+  late final _router = GoRouter(
     initialLocation: '/',
     // webの#を削除
     urlPathStrategy: UrlPathStrategy.path,
@@ -37,5 +38,36 @@ class GoRouterSample extends StatelessWidget {
     errorBuilder: (context, state) => GoRouterErrorPage(
       message: state.error.toString(),
     ),
+    // ユーザーがログインしていない場合はログインページにリダイレクト
+    redirect: (state) {
+      // ユーザーがログインしていない場合はログインが必要
+      // final loggedIn = loginInfo.loggedIn;
+      // final loggingIn = state.subloc == '/login';
+      // if (!loggedIn) return loggingIn ? null : '/login';
+
+      // ユーザーがログインしているにも関わらず、まだログイン画面にいる場合は
+      // ホーム画面に誘導する
+      // if (loggingIn) return '/';
+      print(state.fullpath);
+
+      // 一切リダイレクトが不要な場合
+      return null;
+    },
   );
+}
+
+class LoginInfo extends ChangeNotifier {
+  var _userName = '';
+  String get userName => _userName;
+  bool get loggedIn => _userName.isNotEmpty;
+
+  void login(String userName) {
+    _userName = userName;
+    notifyListeners();
+  }
+
+  void logout() {
+    _userName = '';
+    notifyListeners();
+  }
 }

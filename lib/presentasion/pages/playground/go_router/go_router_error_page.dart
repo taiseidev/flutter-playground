@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class GoRouterErrorPage extends StatelessWidget {
@@ -5,8 +6,10 @@ class GoRouterErrorPage extends StatelessWidget {
   String message;
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(message),
+    return Material(
+      child: Center(
+        child: Text(message),
+      ),
     );
   }
 }
