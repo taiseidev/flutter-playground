@@ -22,6 +22,8 @@ class GoRouterSample extends StatelessWidget {
     initialLocation: '/',
     // webの#を削除
     urlPathStrategy: UrlPathStrategy.path,
+    // ルート診断情報の出力を有効にする
+    debugLogDiagnostics: true,
     routes: [
       GoRoute(
         path: '/',
