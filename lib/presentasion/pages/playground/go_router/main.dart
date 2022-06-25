@@ -23,7 +23,7 @@ class GoRouterSample extends StatelessWidget {
       );
 
   late final _router = GoRouter(
-    // initialLocation: '/',
+    initialLocation: '/',
     // webの#を削除
     urlPathStrategy: UrlPathStrategy.path,
     // ルート診断情報の出力を有効にする
@@ -45,7 +45,7 @@ class GoRouterSample extends StatelessWidget {
       ),
       GoRoute(
         path: '/home',
-        builder: (context, state) => HomePage(),
+        builder: (context, state) => const HomePage(),
       ),
     ],
     // 該当のルートが見つからないときにエラー画面を表示
