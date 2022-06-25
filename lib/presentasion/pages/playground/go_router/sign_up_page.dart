@@ -12,10 +12,17 @@ class SignUpPage extends StatelessWidget {
         title: Text(router.location),
       ),
       body: Center(
-        child: ElevatedButton(
-            // context.go('/1')でも挙動は同じ
-            onPressed: () => context.push('/1'),
-            child: const Text('1画面に遷移')),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextFormField(),
+            TextFormField(),
+            ElevatedButton(
+              onPressed: () {},
+              child: Text('ログイン'),
+            ),
+          ],
+        ),
       ),
     );
   }
