@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_playground/presentasion/pages/FlutterReverseDictionary/flutter_reverse_dictionary.dart';
-import 'package:flutter_playground/presentasion/pages/playground/go_router/go_router_sample.dart';
+import 'package:flutter_playground/presentasion/pages/playground/go_router/main.dart';
 import 'package:flutter_playground/presentasion/pages/playground/learning_key.dart';
 
 void main() {
@@ -26,7 +26,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter PlayGround'),
+        title: const Text('Flutter PlayGround'),
       ),
       body: Center(
         child: Column(
