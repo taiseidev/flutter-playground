@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(router.location),
       ),
-      body: Center(
+      body: const Center(
         child: Text('ホーム画面'),
       ),
     );
