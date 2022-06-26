@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:sensors_plus/sensors_plus.dart' as sensors;
 
 // ジャイロセンサーで3D効果を与える
@@ -98,26 +99,42 @@ class _GyrosensorHomeState extends State<GyrosensorHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Positioned(
-            top: _backgroundOffset.dx,
-            left: _backgroundOffset.dy,
-            child: Image.asset(
-              'assets/background.png',
-              fit: BoxFit.cover,
-              width: MediaQuery.of(context).size.width * 1.5,
+      body: SizedBox(
+        width: double.infinity,
+        height: double.infinity,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Positioned(
+              top: _backgroundOffset.dx,
+              left: _backgroundOffset.dy,
+              child: Image.asset(
+                'assets/cat.jpeg',
+                scale: 1.2,
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          Positioned(
-            top: _foregroundOffset.dx,
-            left: _foregroundOffset.dy,
-            child: Text(
-              'こんにちは',
-              style: TextStyle(color: Colors.black),
+            Text(
+              '3Dテスト',
+              style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
-          ),
-        ],
+            Positioned(
+              top: _foregroundOffset.dx,
+              left: _foregroundOffset.dy,
+              child: Lottie.network(
+                'https://assets5.lottiefiles.com/packages/lf20_dwm2hi59.json',
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
