@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_playground/presentasion/pages/FlutterReverseDictionary/flutter_reverse_dictionary.dart';
 import 'package:flutter_playground/presentasion/pages/playground/go_router/main.dart';
 import 'package:flutter_playground/presentasion/pages/playground/learning_key.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'presentasion/pages/gyrosensor/gyrosensor_home.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GetIt.I
     ..registerSingleton(Count(5))
     ..registerSingleton(await SharedPreferences.getInstance());
-  runApp(GoRouterSample());
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
+    runApp(MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -22,12 +28,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: GoRouterSample(),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,6 +81,15 @@ class MyHomePage extends StatelessWidget {
                 ),
               ),
               child: const Text('Go_router'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => GyrosensorHome(),
+                ),
+              ),
+              child: const Text('GyroSensor'),
             ),
           ],
         ),
