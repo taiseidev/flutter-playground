@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_playground/presentasion/pages/FlutterReverseDictionary/flutter_reverse_dictionary.dart';
+import 'package:flutter_playground/presentasion/pages/gyrosensor/gyrosensor_home.dart';
+import 'package:flutter_playground/presentasion/pages/playground/go_router/main.dart';
 import 'package:flutter_playground/presentasion/pages/playground/learning_key.dart';
-
+import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'presentasion/pages/playground/list_store_location.dart';
 
 void main() {
@@ -23,11 +27,13 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter PlayGround'),
+        title: const Text('Flutter PlayGround'),
       ),
       body: Center(
         child: Column(
@@ -64,10 +70,19 @@ class MyHomePage extends StatelessWidget {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ListStoreLocation(),
+                  builder: (context) => GoRouterSample(),
                 ),
               ),
-              child: const Text('storeListLocation'),
+              child: const Text('Go_router'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => GyrosensorHome(),
+                ),
+              ),
+              child: const Text('GyroSensor'),
             ),
           ],
         ),
