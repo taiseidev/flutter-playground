@@ -1,0 +1,1 @@
+Hello mason_test!
