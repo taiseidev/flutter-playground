@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:badges/badges.dart';
 import 'package:bubble_lens/bubble_lens.dart';
 import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/cupertino.dart';
@@ -64,9 +65,23 @@ class _UiSmapleState extends State<UiSmaple>
       backgroundColor: Colors.black,
       appBar: AppBar(
         elevation: 0,
-        leading: Icon(
-          Icons.settings,
-          size: 40,
+        leading: Badge(
+          position: BadgePosition.topEnd(
+            top: 5,
+            end: 0,
+          ),
+          badgeContent: Text(
+            '0',
+            style: TextStyle(color: Colors.white),
+          ),
+          child: IconButton(
+            onPressed: (() {}),
+            icon: Icon(
+              Icons.notifications,
+              size: 40,
+            ),
+            color: Colors.white,
+          ),
         ),
         actions: [
           GestureDetector(
@@ -110,8 +125,8 @@ class _UiSmapleState extends State<UiSmaple>
       body: TabBarView(
         controller: _tabController,
         children: [
-          MyClose(),
-          Center(child: Test()),
+          MyClose(_tabController.index),
+          MyClose(_tabController.index),
           Center(child: Test()),
         ],
       ),
@@ -130,16 +145,21 @@ class Test extends StatelessWidget {
 }
 
 class MyClose extends StatefulWidget {
+  MyClose(this.index);
+  int index;
+
   @override
   State<MyClose> createState() => _MyCloseState();
 }
 
 class _MyCloseState extends State<MyClose> {
   double opacityLevel = 1.0;
+  late int currentTab;
   late Timer _timer;
   @override
   void initState() {
     super.initState();
+    currentTab = widget.index;
     _timer = Timer.periodic(
       const Duration(seconds: 1),
       (Timer timer) {
@@ -279,7 +299,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           const SizedBox(height: 4),
           Text(
-            'taisei.developer@gmail.com',
+            'ID:fl;djf;ah@gohear;flndpoi',
             style: TextStyle(color: Colors.grey),
           )
         ],
