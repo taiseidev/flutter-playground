@@ -191,7 +191,11 @@ class _MyCloseState extends State<MyClose> {
               duration: Duration(seconds: 1),
               child: Text(
                 'Long press & Scroll',
-                style: TextStyle(color: Colors.grey, fontSize: 30),
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           )
@@ -301,18 +305,42 @@ class _DetailPageState extends State<DetailPage> {
                             ),
                           ),
                           Spacer(),
-                          IconButton(
-                              onPressed: () {
-                                HapticFeedback.heavyImpact();
-                                favorite();
-                              },
-                              icon: Icon(
-                                isFavorite
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                color: isFavorite ? Colors.red : Colors.white,
-                                size: 30,
-                              ))
+                          AnimatedSwitcher(
+                            switchInCurve: Curves.elasticIn,
+                            switchOutCurve: Curves.elasticOut,
+                            duration: Duration(milliseconds: 300),
+                            transitionBuilder: (child, animation) {
+                              return ScaleTransition(
+                                child: child,
+                                scale: animation,
+                              );
+                            },
+                            child: isFavorite
+                                ? IconButton(
+                                    key: ValueKey('0'),
+                                    onPressed: () {
+                                      HapticFeedback.heavyImpact();
+                                      favorite();
+                                    },
+                                    icon: Icon(
+                                      Icons.favorite,
+                                      color: Colors.red,
+                                      size: 30,
+                                    ),
+                                  )
+                                : IconButton(
+                                    key: ValueKey('1'),
+                                    onPressed: () {
+                                      HapticFeedback.heavyImpact();
+                                      favorite();
+                                    },
+                                    icon: Icon(
+                                      Icons.favorite_border,
+                                      color: Colors.white,
+                                      size: 30,
+                                    ),
+                                  ),
+                          ),
                         ],
                       ),
                       DelayedDisplay(
