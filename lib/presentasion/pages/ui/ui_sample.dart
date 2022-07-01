@@ -120,41 +120,51 @@ class MyClose extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: double.infinity,
-      child: BubbleLens(
-        duration: Duration(milliseconds: 100),
-        radius: const Radius.circular(50),
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        widgets: [
-          for (var i = 0; i < imageUrl.length; i++)
-            GestureDetector(
-              onTap: () {
-                print(
-                  Color(
-                    (math.Random().nextDouble() * 0xFFFFFF).toInt() << 0,
-                  ).withOpacity(1.0),
-                );
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    fullscreenDialog: true,
-                    builder: (BuildContext context) => DetailPage(i),
-                  ),
-                );
-              },
-              child: Hero(
-                tag: i,
-                child: Container(
-                  width: 200,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage(imageUrl[i]),
-                      fit: BoxFit.cover,
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          BubbleLens(
+            duration: Duration(milliseconds: 100),
+            radius: const Radius.circular(50),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            widgets: [
+              for (var i = 0; i < imageUrl.length; i++)
+                GestureDetector(
+                  onTap: () {
+                    print(
+                      Color(
+                        (math.Random().nextDouble() * 0xFFFFFF).toInt() << 0,
+                      ).withOpacity(1.0),
+                    );
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        fullscreenDialog: true,
+                        builder: (BuildContext context) => DetailPage(i),
+                      ),
+                    );
+                  },
+                  child: Hero(
+                    tag: i,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(imageUrl[i]),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-            )
+                )
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 40.0),
+            child: Text(
+              'Long press & Scroll',
+              style: TextStyle(color: Colors.grey, fontSize: 30),
+            ),
+          )
         ],
       ),
     );
