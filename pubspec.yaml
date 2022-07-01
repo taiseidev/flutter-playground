@@ -46,6 +46,7 @@ dependencies:
   delayed_display: ^2.0.0
   bubble_lens: ^2.0.0
   badges: ^2.0.3
+  modal_bottom_sheet: ^2.1.0
 
 dev_dependencies:
   flutter_test:
