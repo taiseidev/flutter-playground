@@ -45,6 +45,7 @@ dependencies:
   blobs: ^2.0.0
   delayed_display: ^2.0.0
   bubble_lens: ^2.0.0
+  badges: ^2.0.3
 
 dev_dependencies:
   flutter_test:

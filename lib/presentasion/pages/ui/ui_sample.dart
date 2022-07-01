@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -23,71 +24,125 @@ class MyApp extends StatelessWidget {
   }
 }
 
+final imageUrl = [
+  'https://images.unsplash.com/photo-1603787081207-362bcef7c144?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80',
+  'https://images.unsplash.com/photo-1588361861040-ac9b1018f6d5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80',
+  'https://images.unsplash.com/photo-1586525198428-225f6f12cff5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
+  'https://images.unsplash.com/photo-1603036050141-c61fde866f5c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
+  'https://images.unsplash.com/photo-1618677831708-0e7fda3148b4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
+  'https://images.unsplash.com/photo-1603787081151-cbebeef20092?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80',
+  'https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1431&q=80',
+];
+
 class UiSmaple extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        elevation: 0,
+        leading: Icon(
+          Icons.settings,
+          size: 30,
+        ),
+        backgroundColor: Colors.transparent,
+        title: Text(
+          '2022/07/01',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
       body: SizedBox(
         height: double.infinity,
-        child: Center(
-          child: Container(
-            color: Colors.black,
-            child: BubbleLens(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              widgets: [
-                for (var i = 0; i < 10; i++)
-                  GestureDetector(
-                    // onTap: (() => ScaffoldMessenger.of(context).showSnackBar(
-                    //       SnackBar(
-                    //         duration: const Duration(milliseconds: 500),
-                    //         content: Text(i.toString()),
-                    //       ),
-                    //     )),
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          duration: const Duration(milliseconds: 500),
-                          content: Text(i.toString()),
-                        ),
-                      );
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          fullscreenDialog: true,
-                          builder: (BuildContext context) => DetailPage(i),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      width: 200,
-                      height: 200,
-                      child: Hero(
-                        tag: 'profile$i',
-                        child: i == 0
-                            ? Image.network(
-                                'https://images.unsplash.com/photo-1588484628369-dd7a85bfdc38?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1935&q=80',
-                                fit: BoxFit.cover,
-                                // height: 100,
-                              )
-                            : Image.network(
-                                'https://images.unsplash.com/photo-1595581831735-ec7a54193665?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1729&q=80',
-                                fit: BoxFit.cover,
-                                // height: 100,
-                              ),
-                      ),
-                      // color: Color(
-                      //   (math.Random().nextDouble() * 0xFFFFFF).toInt() << 0,
-                      // ).withOpacity(1.0),
+        child: BubbleLens(
+          duration: Duration(milliseconds: 100),
+          radius: const Radius.circular(50),
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          widgets: [
+            for (var i = 0; i < imageUrl.length; i++)
+              GestureDetector(
+                onTap: () {
+                  print(
+                    Color(
+                      (math.Random().nextDouble() * 0xFFFFFF).toInt() << 0,
+                    ).withOpacity(1.0),
+                  );
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      fullscreenDialog: true,
+                      builder: (BuildContext context) => DetailPage(i),
                     ),
-                  )
-              ],
-            ),
-          ),
+                  );
+                },
+                child: Hero(
+                  tag: i,
+                  child: Container(
+                    width: 200,
+                    height: 200,
+                    child: Image.network(
+                      imageUrl[i],
+                      fit: BoxFit.cover,
+                      // height: 100,
+                    ),
+                  ),
+                ),
+              )
+          ],
         ),
       ),
     );
   }
 }
+
+// class UiSmaple extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: SizedBox(
+//         height: double.infinity,
+//         child: Container(
+//           color: Colors.black,
+//           child: BubbleLens(
+//             duration: Duration(milliseconds: 100),
+//             radius: const Radius.circular(50),
+//             width: MediaQuery.of(context).size.width,
+//             height: MediaQuery.of(context).size.height,
+//             widgets: [
+//               for (var i = 0; i < imageUrl.length; i++)
+//                 GestureDetector(
+//                   onTap: () {
+//                     Navigator.of(context).push(
+//                       MaterialPageRoute(
+//                         fullscreenDialog: true,
+//                         builder: (BuildContext context) => DetailPage(i),
+//                       ),
+//                     );
+//                   },
+//                   child: Container(
+//                     width: 200,
+//                     height: 200,
+//                     child: Hero(
+//                       tag: 'profile$i',
+//                       child: Image.network(
+//                         imageUrl[i],
+//                         fit: BoxFit.cover,
+//                         // height: 100,
+//                       ),
+//                     ),
+//                   ),
+//                 )
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class DetailPage extends StatelessWidget {
   DetailPage(this.i);
@@ -102,11 +157,11 @@ class DetailPage extends StatelessWidget {
             Column(
               children: <Widget>[
                 Hero(
-                  tag: 'profile$i',
+                  tag: i,
                   child: GestureDetector(
                     onTap: () => Navigator.pop(context),
                     child: Image.network(
-                      'https://images.unsplash.com/photo-1595581831735-ec7a54193665?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1729&q=80',
+                      imageUrl[i],
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -181,39 +236,3 @@ class DetailPage extends StatelessWidget {
     );
   }
 }
-// class UiSmaple extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         body: SizedBox(
-//       height: double.infinity,
-//       child: Stack(
-//         children: [
-//           Column(
-//             children: [
-//               Blob.fromID(
-//                 id: ['12-5-36'],
-//                 size: 400,
-//               ),
-//               DelayedDisplay(
-//                 delay: Duration(seconds: 1),
-//                 slidingCurve: Curves.slowMiddle,
-//                 child: Text(
-//                   "Hello",
-//                   style: TextStyle(
-//                     fontWeight: FontWeight.bold,
-//                     fontSize: 35.0,
-//                     color: Colors.blue,
-//                   ),
-//                 ),
-//               ),
-//             ],
-//           ),
-//           // SvgPicture.asset(
-//           //   'assets/test.svg',
-//           // ),
-//         ],
-//       ),
-//     ));
-//   }
-// }
