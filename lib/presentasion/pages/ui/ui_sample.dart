@@ -2,10 +2,13 @@ import 'dart:async';
 
 import 'package:bubble_lens/bubble_lens.dart';
 import 'package:delayed_display/delayed_display.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:blobs/blobs.dart';
+import 'package:settings_ui/settings_ui.dart';
+import 'package:status_view/status_view.dart';
 import 'Dart:math' as math;
 
 void main() {
@@ -63,8 +66,26 @@ class _UiSmapleState extends State<UiSmaple>
         elevation: 0,
         leading: Icon(
           Icons.settings,
-          size: 30,
+          size: 40,
         ),
+        actions: [
+          GestureDetector(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: ((context) => ProfilePage()),
+              ),
+            ),
+            child: Hero(
+              tag: 'profile',
+              child: CircleAvatar(
+                radius: 20,
+                backgroundImage: NetworkImage(
+                    'https://images.unsplash.com/photo-1473625247510-8ceb1760943f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1411&q=80'),
+              ),
+            ),
+          ),
+        ],
         backgroundColor: Colors.transparent,
         title: Text(
           '2022/07/01',
@@ -195,6 +216,235 @@ class _MyCloseState extends State<MyClose> {
   }
 }
 
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: buildAppBar(context),
+      body: ListView(
+        physics: BouncingScrollPhysics(),
+        children: [
+          Hero(
+            tag: 'profile',
+            child: GestureDetector(
+              onTap: () {},
+              child: StatusView(
+                radius: 70,
+                spacing: 15,
+                strokeWidth: 3,
+                indexOfSeenStatus: 2,
+                numberOfStatus: 5,
+                padding: 10,
+                centerImageUrl:
+                    'https://images.unsplash.com/photo-1473625247510-8ceb1760943f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1411&q=80',
+                seenColor: Colors.grey,
+                unSeenColor: Colors.red,
+              ),
+            ),
+
+            // ProfileWidget(
+            //   imagePath:
+            //       'https://images.unsplash.com/photo-1473625247510-8ceb1760943f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1411&q=80',
+            //   onClicked: () async {},
+            // ),
+          ),
+          const SizedBox(height: 24),
+          buildName(),
+          const SizedBox(height: 24),
+          Center(child: buildUpgradeButton()),
+          const SizedBox(height: 24),
+          NumbersWidget(),
+          const SizedBox(height: 48),
+          buildAbout(),
+        ],
+      ),
+    );
+  }
+
+  Widget buildName() => Column(
+        children: [
+          Text(
+            'Joe Wick',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'taisei.developer@gmail.com',
+            style: TextStyle(color: Colors.grey),
+          )
+        ],
+      );
+
+  Widget buildUpgradeButton() => ButtonWidget(
+        text: 'Upgrade To PRO',
+        onClicked: () {},
+      );
+
+  Widget buildAbout() => Container(
+        padding: EdgeInsets.symmetric(horizontal: 48),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'About',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Flutter engineer',
+              style: TextStyle(
+                fontSize: 16,
+                height: 1.4,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      );
+}
+
+AppBar buildAppBar(BuildContext context) {
+  final icon = Icons.settings;
+
+  return AppBar(
+    leading: BackButton(),
+    backgroundColor: Colors.transparent,
+    elevation: 0,
+    actions: [
+      IconButton(
+        icon: Icon(icon),
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: ((context) => SettingPage()),
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+class ButtonWidget extends StatelessWidget {
+  final String text;
+  final VoidCallback onClicked;
+
+  const ButtonWidget({
+    Key? key,
+    required this.text,
+    required this.onClicked,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: StadiumBorder(),
+          onPrimary: Colors.white,
+          padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+        ),
+        child: Text(
+          text,
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        onPressed: onClicked,
+      );
+}
+
+class NumbersWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          buildButton(context, '4.8', 'Ranking'),
+          buildDivider(),
+          buildButton(context, '35', 'Following'),
+          buildDivider(),
+          buildButton(context, '50', 'Followers'),
+        ],
+      );
+  Widget buildDivider() => Container(
+        height: 24,
+        child: VerticalDivider(
+          color: Colors.white,
+        ),
+      );
+
+  Widget buildButton(BuildContext context, String value, String text) =>
+      MaterialButton(
+        padding: EdgeInsets.symmetric(vertical: 4),
+        onPressed: () {},
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              value,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(height: 2),
+            Text(
+              text,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      );
+}
+
+class SettingPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: SettingsList(
+          physics: NeverScrollableScrollPhysics(),
+          sections: [
+            SettingsSection(
+              title: Text('Common'),
+              tiles: <SettingsTile>[
+                SettingsTile.navigation(
+                  leading: Icon(Icons.language),
+                  title: Text('Language'),
+                  value: Text('English'),
+                ),
+                SettingsTile.switchTile(
+                  onToggle: (value) {},
+                  initialValue: true,
+                  leading: Icon(Icons.format_paint),
+                  title: Text('Enable custom theme'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 // class UiSmaple extends StatelessWidget {
 //   @override
 //   Widget build(BuildContext context) {
@@ -260,7 +510,15 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(Icons.arrow_back_ios)),
+      ),
       body: SingleChildScrollView(
         child: Stack(
           children: <Widget>[
@@ -268,12 +526,9 @@ class _DetailPageState extends State<DetailPage> {
               children: <Widget>[
                 Hero(
                   tag: widget.i,
-                  child: GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Image.network(
-                      imageUrl[widget.i],
-                      fit: BoxFit.cover,
-                    ),
+                  child: Image.network(
+                    imageUrl[widget.i],
+                    fit: BoxFit.cover,
                   ),
                 ),
                 Padding(
@@ -332,7 +587,104 @@ class _DetailPageState extends State<DetailPage> {
                                   ),
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text("select stamp🚀"),
+                                      // content:
+                                      actions: <Widget>[
+                                        Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () {},
+                                                  icon: Icon(
+                                                    Icons.access_alarm_rounded,
+                                                    size: 50,
+                                                  ),
+                                                ),
+                                                IconButton(
+                                                  onPressed: () {},
+                                                  icon: Icon(
+                                                    Icons.access_alarm_rounded,
+                                                    size: 50,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () {},
+                                                  icon: Icon(
+                                                    Icons.access_alarm_rounded,
+                                                    size: 50,
+                                                  ),
+                                                ),
+                                                IconButton(
+                                                  onPressed: () {},
+                                                  icon: Icon(
+                                                    Icons.access_alarm_rounded,
+                                                    size: 50,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () {},
+                                                  icon: Icon(
+                                                    Icons.access_alarm_rounded,
+                                                    size: 50,
+                                                  ),
+                                                ),
+                                                IconButton(
+                                                  onPressed: () {},
+                                                  icon: Icon(
+                                                    Icons.access_alarm_rounded,
+                                                    size: 50,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    );
+                                  });
+                            },
+                            icon: Icon(
+                              Icons.face_outlined,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled:
+                                      true, //trueにしないと、Containerのheightが反映されない
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(15)),
+                                  ),
+                                  builder: (BuildContext context) {
+                                    return Container(
+                                      height: 300,
+                                    );
+                                  });
+                            },
                             icon: Icon(
                               Icons.more_vert,
                               color: Colors.white,
