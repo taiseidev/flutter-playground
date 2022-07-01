@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:bubble_lens/bubble_lens.dart';
 import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:blobs/blobs.dart';
 import 'Dart:math' as math;
@@ -51,7 +54,7 @@ class _UiSmapleState extends State<UiSmaple>
       text: "TimeLine",
     ),
     Tab(
-      text: "Three",
+      text: "other",
     ),
   ];
 
@@ -109,13 +112,39 @@ class Test extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      'こんにちは',
+      'test',
       style: TextStyle(color: Colors.white),
     );
   }
 }
 
-class MyClose extends StatelessWidget {
+class MyClose extends StatefulWidget {
+  @override
+  State<MyClose> createState() => _MyCloseState();
+}
+
+class _MyCloseState extends State<MyClose> {
+  double opacityLevel = 1.0;
+  late Timer _timer;
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (Timer timer) {
+        setState(() {
+          opacityLevel = opacityLevel == 1.0 ? 0.0 : 1.0;
+        });
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -132,11 +161,8 @@ class MyClose extends StatelessWidget {
               for (var i = 0; i < imageUrl.length; i++)
                 GestureDetector(
                   onTap: () {
-                    print(
-                      Color(
-                        (math.Random().nextDouble() * 0xFFFFFF).toInt() << 0,
-                      ).withOpacity(1.0),
-                    );
+                    // タップ時に振動
+                    HapticFeedback.heavyImpact();
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         fullscreenDialog: true,
@@ -160,9 +186,13 @@ class MyClose extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 40.0),
-            child: Text(
-              'Long press & Scroll',
-              style: TextStyle(color: Colors.grey, fontSize: 30),
+            child: AnimatedOpacity(
+              opacity: opacityLevel,
+              duration: Duration(seconds: 1),
+              child: Text(
+                'Long press & Scroll',
+                style: TextStyle(color: Colors.grey, fontSize: 30),
+              ),
             ),
           )
         ],
@@ -216,9 +246,23 @@ class MyClose extends StatelessWidget {
 //   }
 // }
 
-class DetailPage extends StatelessWidget {
+class DetailPage extends StatefulWidget {
   DetailPage(this.i);
   final int i;
+
+  @override
+  State<DetailPage> createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
+  bool isFavorite = false;
+
+  void favorite() {
+    setState(() {
+      isFavorite = !isFavorite;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -229,11 +273,11 @@ class DetailPage extends StatelessWidget {
             Column(
               children: <Widget>[
                 Hero(
-                  tag: i,
+                  tag: widget.i,
                   child: GestureDetector(
                     onTap: () => Navigator.pop(context),
                     child: Image.network(
-                      imageUrl[i],
+                      imageUrl[widget.i],
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -243,21 +287,38 @@ class DetailPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      DelayedDisplay(
-                        delay: Duration(milliseconds: 500),
-                        child: Text(
-                          "大西 泰生",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 35.0,
-                            color: Colors.white,
+                      Row(
+                        children: [
+                          DelayedDisplay(
+                            delay: Duration(milliseconds: 500),
+                            child: Text(
+                              "Hi!",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 35.0,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                        ),
+                          Spacer(),
+                          IconButton(
+                              onPressed: () {
+                                HapticFeedback.heavyImpact();
+                                favorite();
+                              },
+                              icon: Icon(
+                                isFavorite
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                color: isFavorite ? Colors.red : Colors.white,
+                                size: 30,
+                              ))
+                        ],
                       ),
                       DelayedDisplay(
                         delay: Duration(milliseconds: 600),
                         child: Text(
-                          "1997年5月18日",
+                          "2022/07/01",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 35.0,
@@ -271,7 +332,7 @@ class DetailPage extends StatelessWidget {
                       DelayedDisplay(
                         delay: Duration(milliseconds: 800),
                         child: Text(
-                          "コメント",
+                          "comments",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 35.0,
@@ -287,7 +348,7 @@ class DetailPage extends StatelessWidget {
                           DelayedDisplay(
                             delay: Duration(milliseconds: 1000),
                             child: Text(
-                              "初めまして！！現在神奈川県に住んでいる大西泰生と申します！趣味はFlutterでアプリ開発をすることです！他にもキャンプや映画鑑賞など好きなことがたくさんあります！今後ともどうぞよろしくお願いします！",
+                              "Hello everyone, my name is Beck. Some people find it hard to pronounce, so feel free to call me Be",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 35.0,
