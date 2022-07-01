@@ -34,66 +34,129 @@ final imageUrl = [
   'https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1431&q=80',
 ];
 
-class UiSmaple extends StatelessWidget {
+class UiSmaple extends StatefulWidget {
+  @override
+  State<UiSmaple> createState() => _UiSmapleState();
+}
+
+class _UiSmapleState extends State<UiSmaple>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  final List<Tab> tabs = <Tab>[
+    Tab(
+      text: 'Today',
+    ),
+    Tab(
+      text: "TimeLine",
+    ),
+    Tab(
+      text: "Three",
+    ),
+  ];
+
+  @override
+  void initState() {
+    _tabController = TabController(length: tabs.length, vsync: this);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        elevation: 0,
-        leading: Icon(
-          Icons.settings,
-          size: 30,
-        ),
-        backgroundColor: Colors.transparent,
-        title: Text(
-          '2022/07/01',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
+        extendBodyBehindAppBar: true,
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          elevation: 0,
+          leading: Icon(
+            Icons.settings,
+            size: 30,
+          ),
+          backgroundColor: Colors.transparent,
+          title: Text(
+            '2022/07/01',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          bottom: TabBar(
+            physics: NeverScrollableScrollPhysics(),
+            isScrollable: true,
+            tabs: tabs,
+            controller: _tabController,
+            unselectedLabelColor: Colors.grey,
+            indicatorColor: Colors.white,
+            indicatorSize: TabBarIndicatorSize.tab,
+            indicatorWeight: 2,
+            indicatorPadding:
+                EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
+            // indicator: CustomTabIndicator(),
+            labelColor: Colors.white,
           ),
         ),
-      ),
-      body: SizedBox(
-        height: double.infinity,
-        child: BubbleLens(
-          duration: Duration(milliseconds: 100),
-          radius: const Radius.circular(50),
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          widgets: [
-            for (var i = 0; i < imageUrl.length; i++)
-              GestureDetector(
-                onTap: () {
-                  print(
-                    Color(
-                      (math.Random().nextDouble() * 0xFFFFFF).toInt() << 0,
-                    ).withOpacity(1.0),
-                  );
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      fullscreenDialog: true,
-                      builder: (BuildContext context) => DetailPage(i),
-                    ),
-                  );
-                },
-                child: Hero(
-                  tag: i,
-                  child: Container(
-                    width: 200,
-                    height: 200,
-                    child: Image.network(
-                      imageUrl[i],
-                      fit: BoxFit.cover,
-                      // height: 100,
-                    ),
+        body: TabBarView(
+          controller: _tabController,
+          children: [
+            MyClose(),
+            Center(child: Test()),
+            Center(child: Test()),
+          ],
+        ));
+  }
+}
+
+class Test extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'こんにちは',
+      style: TextStyle(color: Colors.white),
+    );
+  }
+}
+
+class MyClose extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: double.infinity,
+      child: BubbleLens(
+        duration: Duration(milliseconds: 100),
+        radius: const Radius.circular(50),
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        widgets: [
+          for (var i = 0; i < imageUrl.length; i++)
+            GestureDetector(
+              onTap: () {
+                print(
+                  Color(
+                    (math.Random().nextDouble() * 0xFFFFFF).toInt() << 0,
+                  ).withOpacity(1.0),
+                );
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    fullscreenDialog: true,
+                    builder: (BuildContext context) => DetailPage(i),
+                  ),
+                );
+              },
+              child: Hero(
+                tag: i,
+                child: Container(
+                  width: 200,
+                  height: 200,
+                  child: Image.network(
+                    imageUrl[i],
+                    fit: BoxFit.cover,
+                    // height: 100,
                   ),
                 ),
-              )
-          ],
-        ),
+              ),
+            )
+        ],
       ),
     );
   }
