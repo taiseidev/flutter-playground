@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
 }
 
 final imageUrl = [
-  'https://images.unsplash.com/photo-1603787081207-362bcef7c144?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80',
+  'https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
   'https://images.unsplash.com/photo-1588361861040-ac9b1018f6d5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80',
   'https://images.unsplash.com/photo-1586525198428-225f6f12cff5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
   'https://images.unsplash.com/photo-1603036050141-c61fde866f5c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
@@ -64,46 +64,44 @@ class _UiSmapleState extends State<UiSmaple>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBodyBehindAppBar: true,
-        backgroundColor: Colors.black,
-        appBar: AppBar(
-          elevation: 0,
-          leading: Icon(
-            Icons.settings,
-            size: 30,
-          ),
-          backgroundColor: Colors.transparent,
-          title: Text(
-            '2022/07/01',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          bottom: TabBar(
-            physics: NeverScrollableScrollPhysics(),
-            isScrollable: true,
-            tabs: tabs,
-            controller: _tabController,
-            unselectedLabelColor: Colors.grey,
-            indicatorColor: Colors.white,
-            indicatorSize: TabBarIndicatorSize.tab,
-            indicatorWeight: 2,
-            indicatorPadding:
-                EdgeInsets.symmetric(horizontal: 18.0, vertical: 8),
-            // indicator: CustomTabIndicator(),
-            labelColor: Colors.white,
+      extendBodyBehindAppBar: true,
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        elevation: 0,
+        leading: Icon(
+          Icons.settings,
+          size: 30,
+        ),
+        backgroundColor: Colors.transparent,
+        title: Text(
+          '2022/07/01',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        body: TabBarView(
+        bottom: TabBar(
+          splashFactory: NoSplash.splashFactory,
+          physics: NeverScrollableScrollPhysics(),
+          isScrollable: true,
+          tabs: tabs,
           controller: _tabController,
-          children: [
-            MyClose(),
-            Center(child: Test()),
-            Center(child: Test()),
-          ],
-        ));
+          unselectedLabelColor: Colors.grey,
+          indicatorColor: Colors.white,
+          indicatorSize: TabBarIndicatorSize.tab,
+          labelColor: Colors.white,
+        ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          MyClose(),
+          Center(child: Test()),
+          Center(child: Test()),
+        ],
+      ),
+    );
   }
 }
 
@@ -148,10 +146,11 @@ class MyClose extends StatelessWidget {
                 child: Container(
                   width: 200,
                   height: 200,
-                  child: Image.network(
-                    imageUrl[i],
-                    fit: BoxFit.cover,
-                    // height: 100,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(imageUrl[i]),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
