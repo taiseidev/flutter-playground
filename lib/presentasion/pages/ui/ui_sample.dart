@@ -48,7 +48,7 @@ class _UiSmapleState extends State<UiSmaple>
       text: "TimeLine",
     ),
     Tab(
-      text: "other",
+      text: "Favorite",
     ),
   ];
 
@@ -71,11 +71,16 @@ class _UiSmapleState extends State<UiSmaple>
             end: 0,
           ),
           badgeContent: Text(
-            '0',
+            '2',
             style: TextStyle(color: Colors.white),
           ),
           child: IconButton(
-            onPressed: (() {}),
+            onPressed: (() => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((context) => NotificationPage()),
+                  ),
+                )),
             icon: Icon(
               Icons.notifications,
               size: 40,
@@ -129,6 +134,14 @@ class _UiSmapleState extends State<UiSmaple>
           MyClose(_tabController.index),
           Center(child: Test()),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.red,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20), //角の丸み
+        ),
+        onPressed: () {},
+        child: Icon(Icons.camera),
       ),
     );
   }
@@ -305,9 +318,18 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       );
 
-  Widget buildUpgradeButton() => ButtonWidget(
-        text: 'Upgrade To PRO',
-        onClicked: () {},
+  Widget buildUpgradeButton() => Column(
+        children: [
+          Text(
+            'FREE',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          TextButton(onPressed: () {}, child: Text('become a paying member?'))
+        ],
       );
 
   Widget buildAbout() => Container(
@@ -763,6 +785,82 @@ class _DetailPageState extends State<DetailPage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+// 自作でNavigatorをいじってみる
+// https://zenn.dev/pressedkonbu/books/flutter-reverse-lookup-dictionary/viewer/025-custom-page-route
+
+class NotificationPage extends StatefulWidget {
+  @override
+  State<NotificationPage> createState() => _NotificationPageState();
+}
+
+class _NotificationPageState extends State<NotificationPage>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+
+  List<Tab> tabs = [
+    Tab(
+      text: 'All',
+    ),
+    Tab(
+      text: 'System',
+    ),
+  ];
+  @override
+  void initState() {
+    super.initState();
+
+    _tabController = TabController(length: tabs.length, vsync: this);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text(
+          'Notifications',
+          style: TextStyle(color: Colors.white),
+        ),
+        bottom: TabBar(
+          splashFactory: NoSplash.splashFactory,
+          physics: NeverScrollableScrollPhysics(),
+          isScrollable: true,
+          tabs: tabs,
+          controller: _tabController,
+          unselectedLabelColor: Colors.grey,
+          indicatorColor: Colors.white,
+          indicatorSize: TabBarIndicatorSize.tab,
+          labelColor: Colors.white,
+        ),
+      ),
+      body: ListView.separated(
+        itemCount: 100,
+        itemBuilder: ((context, index) => ListTile(
+              leading: CircleAvatar(
+                radius: 15,
+                backgroundImage: NetworkImage(
+                    'https://images.unsplash.com/photo-1473625247510-8ceb1760943f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1411&q=80'),
+              ),
+              title: Text(
+                'Taisei Onishi favored it.',
+                style: TextStyle(color: Colors.white),
+              ),
+              subtitle: Text(
+                'The weather was nice and we visited a natural park to see koalas. ',
+                style: TextStyle(color: Colors.grey),
+              ),
+            )),
+        separatorBuilder: (BuildContext context, int index) {
+          return Divider(
+            color: Colors.grey,
+          );
+        },
       ),
     );
   }

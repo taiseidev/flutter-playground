@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_playground/presentasion/pages/FlutterReverseDictionary/flutter_reverse_dictionary.dart';
 import 'package:flutter_playground/presentasion/pages/playground/go_router/main.dart';
 import 'package:flutter_playground/presentasion/pages/playground/learning_key.dart';
+import 'package:flutter_playground/presentasion/pages/ui/ui_sample.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+      home: UiSmaple(),
     );
   }
 }
