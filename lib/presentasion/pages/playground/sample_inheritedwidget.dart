@@ -106,3 +106,18 @@ class MySecondPage extends StatelessWidget {
     );
   }
 }
+
+class InheritedCounter extends InheritedWidget {
+  const InheritedCounter({
+    super.key,
+    required this.counter,
+    //1
+    required super.child,
+  });
+
+  final int counter;
+
+  //2
+  @override
+  bool updateShouldNotify(covariant InheritedWidget oldWidget) => true;
+}
