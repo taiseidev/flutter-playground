@@ -41,7 +41,7 @@ class MyHomePage extends StatelessWidget {
                   'ボタンを押した回数',
                 ),
                 Text(
-                  'ここに回数を表示する',
+                  InheritedCounter.of(context).counter.toString(),
                   style: Theme.of(context).textTheme.headline4,
                 ),
               ],
@@ -88,7 +88,7 @@ class MySecondPage extends StatelessWidget {
                   'ボタンを押した回数',
                 ),
                 Text(
-                  'ここに回数を表示する',
+                  InheritedCounter.of(context).counter.toString(),
                   style: Theme.of(context).textTheme.headline4,
                 ),
               ],
@@ -119,7 +119,8 @@ class InheritedCounter extends InheritedWidget {
   });
 
   final int counter;
-
+  static InheritedCounter of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<InheritedCounter>()!;
   //2
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) => true;
