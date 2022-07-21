@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:badges/badges.dart';
 import 'package:bubble_lens/bubble_lens.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:blobs/blobs.dart';
+import 'package:lottie/lottie.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:status_view/status_view.dart';
 import 'Dart:math' as math;
@@ -41,13 +43,13 @@ class _UiSmapleState extends State<UiSmaple>
   late TabController _tabController;
 
   final List<Tab> tabs = <Tab>[
-    Tab(
+    const Tab(
       text: 'Today',
     ),
-    Tab(
+    const Tab(
       text: "TimeLine",
     ),
-    Tab(
+    const Tab(
       text: "Favorite",
     ),
   ];
@@ -70,18 +72,34 @@ class _UiSmapleState extends State<UiSmaple>
             top: 5,
             end: 0,
           ),
-          badgeContent: Text(
+          badgeContent: const Text(
             '2',
             style: TextStyle(color: Colors.white),
           ),
           child: IconButton(
-            onPressed: (() => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((context) => NotificationPage()),
+            onPressed: (() => Navigator.of(context).push(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) {
+                      return NotificationPage();
+                    },
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      // final Offset begin = Offset(0.0, 1.0); // 右から左
+                      const Offset begin = Offset(-1.0, 0.0); // 左から右
+                      const Offset end = Offset.zero;
+                      final Animatable<Offset> tween =
+                          Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: Curves.easeInOut));
+                      final Animation<Offset> offsetAnimation =
+                          animation.drive(tween);
+                      return SlideTransition(
+                        position: offsetAnimation,
+                        child: child,
+                      );
+                    },
                   ),
                 )),
-            icon: Icon(
+            icon: const Icon(
               Icons.notifications,
               size: 40,
             ),
@@ -96,7 +114,7 @@ class _UiSmapleState extends State<UiSmaple>
                 builder: ((context) => ProfilePage()),
               ),
             ),
-            child: Hero(
+            child: const Hero(
               tag: 'profile',
               child: CircleAvatar(
                 radius: 20,
@@ -107,9 +125,9 @@ class _UiSmapleState extends State<UiSmaple>
           ),
         ],
         backgroundColor: Colors.transparent,
-        title: Text(
+        title: const Text(
           '2022/07/01',
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 30,
             fontWeight: FontWeight.bold,
@@ -117,7 +135,7 @@ class _UiSmapleState extends State<UiSmaple>
         ),
         bottom: TabBar(
           splashFactory: NoSplash.splashFactory,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           isScrollable: true,
           tabs: tabs,
           controller: _tabController,
@@ -132,17 +150,76 @@ class _UiSmapleState extends State<UiSmaple>
         children: [
           MyClose(_tabController.index),
           MyClose(_tabController.index),
-          Center(child: Test()),
+          FavoritePage(),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.red,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20), //角の丸み
-        ),
-        onPressed: () {},
-        child: Icon(Icons.camera),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: Colors.red,
+      //   shape: RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.circular(20), //角の丸み
+      //   ),
+      //   onPressed: () {},
+      //   child: const Icon(Icons.camera),
+      // ),
+    );
+  }
+}
+
+class FavoritePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      itemCount: 100,
+      itemBuilder: ((context, index) {
+        return ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+            child: Row(
+              children: [
+                const CircleAvatar(
+                  radius: 15,
+                  backgroundImage: NetworkImage(
+                      'https://images.unsplash.com/photo-1473625247510-8ceb1760943f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1411&q=80'),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                const Text(
+                  'Taisei',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+          subtitle: Column(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20.0),
+                child: Image.network(
+                  imageUrl[index],
+                  fit: BoxFit.cover,
+                ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              const Text(
+                'A failure is like fertilizer. It stinks to be sure, but it makes things grow faster in the future.',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
+      separatorBuilder: (BuildContext context, int index) {
+        return const Divider(
+          color: Colors.grey,
+        );
+      },
     );
   }
 }
@@ -150,10 +227,20 @@ class _UiSmapleState extends State<UiSmaple>
 class Test extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return const Text(
       'test',
       style: TextStyle(color: Colors.white),
     );
+  }
+}
+
+extension _ColorExt on Color {
+  Color returnColor() {
+    bool isBirthday = true;
+    if (isBirthday == true) {
+      return const Color(0xffF0E68C);
+    }
+    return const Color(0xff000000);
   }
 }
 
@@ -168,6 +255,7 @@ class MyClose extends StatefulWidget {
 class _MyCloseState extends State<MyClose> {
   double opacityLevel = 1.0;
   late int currentTab;
+  final bool _filter = true;
   late Timer _timer;
   @override
   void initState() {
@@ -191,60 +279,113 @@ class _MyCloseState extends State<MyClose> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: double.infinity,
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          BubbleLens(
-            duration: Duration(milliseconds: 100),
-            radius: const Radius.circular(50),
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            widgets: [
-              for (var i = 0; i < imageUrl.length; i++)
-                GestureDetector(
-                  onTap: () {
-                    // タップ時に振動
-                    HapticFeedback.heavyImpact();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        fullscreenDialog: true,
-                        builder: (BuildContext context) => DetailPage(i),
-                      ),
-                    );
-                  },
-                  child: Hero(
-                    tag: i,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(imageUrl[i]),
-                          fit: BoxFit.cover,
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        SizedBox(
+          height: double.infinity,
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              BubbleLens(
+                duration: const Duration(milliseconds: 100),
+                radius: const Radius.circular(50),
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                widgets: [
+                  for (var i = 0; i < imageUrl.length; i++)
+                    GestureDetector(
+                      onTap: () {
+                        // タップ時に振動
+                        HapticFeedback.heavyImpact();
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            fullscreenDialog: true,
+                            builder: (BuildContext context) => DetailPage(i),
+                          ),
+                        );
+                      },
+                      child: Hero(
+                        tag: i,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(imageUrl[i]),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
+                      ),
+                    )
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 40.0),
+                child: AnimatedOpacity(
+                  opacity: opacityLevel,
+                  duration: const Duration(seconds: 1),
+                  child: const Text(
+                    'Long press & Scroll',
+                    style: const TextStyle(
+                      color: Colors.grey,
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        // 未投稿の場合はFilterをかけるようにする
+        if (_filter)
+          BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: 5,
+              sigmaY: 5,
+            ),
+            child: Container(
+              color: Colors.black.withOpacity(0),
+            ),
+          ),
+        if (_filter)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "Can't watch the post",
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  48,
+                  24,
+                  48,
+                  0,
+                ),
+                child: Container(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                      onPrimary: Colors.black,
+                    ),
+                    onPressed: () {},
+                    child: const Text(
+                      'Post Now',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                )
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 40.0),
-            child: AnimatedOpacity(
-              opacity: opacityLevel,
-              duration: Duration(seconds: 1),
-              child: Text(
-                'Long press & Scroll',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-          ),
-        ],
-      ),
+            ],
+          )
+      ],
     );
   }
 }
@@ -258,52 +399,75 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: buildAppBar(context),
-      body: ListView(
-        physics: BouncingScrollPhysics(),
-        children: [
-          Hero(
-            tag: 'profile',
-            child: GestureDetector(
-              onTap: () {},
-              child: StatusView(
-                radius: 70,
-                spacing: 15,
-                strokeWidth: 3,
-                indexOfSeenStatus: 2,
-                numberOfStatus: 5,
-                padding: 10,
-                centerImageUrl:
-                    'https://images.unsplash.com/photo-1473625247510-8ceb1760943f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1411&q=80',
-                seenColor: Colors.grey,
-                unSeenColor: Colors.red,
-              ),
-            ),
-
-            // ProfileWidget(
-            //   imagePath:
-            //       'https://images.unsplash.com/photo-1473625247510-8ceb1760943f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1411&q=80',
-            //   onClicked: () async {},
+        extendBodyBehindAppBar: true,
+        backgroundColor: Colors.black,
+        appBar: buildAppBar(context),
+        body: Stack(
+          children: [
+            // Lottie.network(
+            //   'https://assets10.lottiefiles.com/packages/lf20_llqi3lop.json',
+            //   width: double.infinity,
+            //   fit: BoxFit.cover,
             // ),
-          ),
-          const SizedBox(height: 24),
-          buildName(),
-          const SizedBox(height: 24),
-          Center(child: buildUpgradeButton()),
-          const SizedBox(height: 24),
-          NumbersWidget(),
-          const SizedBox(height: 48),
-          buildAbout(),
-        ],
-      ),
-    );
+            Lottie.network(
+              'https://assets7.lottiefiles.com/packages/lf20_oolltm56.json',
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+            // Lottie.network(
+            //   'https://assets9.lottiefiles.com/packages/lf20_dvaa7eik.json',
+            //   width: double.infinity,
+            //   fit: BoxFit.cover,
+            // ),
+            // Lottie.network(
+            //   'https://assets7.lottiefiles.com/packages/lf20_k2yibw56.json',
+            //   width: double.infinity,
+            //   fit: BoxFit.cover,
+            // ),
+            // Lottie.network(
+            //   'https://assets7.lottiefiles.com/packages/lf20_1m5nibfw.json',
+            //   width: double.infinity,
+            //   fit: BoxFit.cover,
+            // ),
+            ListView(
+              physics: const BouncingScrollPhysics(),
+              children: [
+                Hero(
+                  tag: 'profile',
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: StatusView(
+                      radius: 70,
+                      spacing: 15,
+                      strokeWidth: 3,
+                      indexOfSeenStatus: 2,
+                      numberOfStatus: 5,
+                      padding: 10,
+                      centerImageUrl:
+                          'https://images.unsplash.com/photo-1473625247510-8ceb1760943f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1411&q=80',
+                      seenColor: Colors.grey,
+                      unSeenColor: Colors.red,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                buildName(),
+                const SizedBox(height: 24),
+                Center(child: buildUpgradeButton()),
+                const SizedBox(height: 24),
+                NumbersWidget(),
+                const SizedBox(height: 48),
+                buildAbout(),
+              ],
+            ),
+          ],
+        ));
   }
 
   Widget buildName() => Column(
         children: [
-          Text(
-            'Joe Wick',
+          const Text(
+            'Taisei',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 24,
@@ -311,45 +475,47 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           const SizedBox(height: 4),
-          Text(
-            'ID:fl;djf;ah@gohear;flndpoi',
-            style: TextStyle(color: Colors.grey),
+          const Text(
+            'ID:5947596159-74531902',
+            style: const TextStyle(color: Colors.grey),
           )
         ],
       );
 
   Widget buildUpgradeButton() => Column(
         children: [
-          Text(
+          const Text(
             'FREE',
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 30,
               fontWeight: FontWeight.bold,
             ),
           ),
-          TextButton(onPressed: () {}, child: Text('become a paying member?'))
+          TextButton(
+              onPressed: () {}, child: const Text('become a paying member?'))
         ],
       );
 
   Widget buildAbout() => Container(
-        padding: EdgeInsets.symmetric(horizontal: 48),
+        padding: const EdgeInsets.symmetric(horizontal: 48),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'About',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
             const SizedBox(height: 16),
-            Text(
-              'Flutter engineer',
-              style: TextStyle(
+            const Text(
+              "Hi! I'm Flutter engineer.",
+              style: const TextStyle(
                 fontSize: 16,
+                fontWeight: FontWeight.bold,
                 height: 1.4,
                 color: Colors.white,
               ),
@@ -360,10 +526,10 @@ class _ProfilePageState extends State<ProfilePage> {
 }
 
 AppBar buildAppBar(BuildContext context) {
-  final icon = Icons.settings;
+  const icon = Icons.settings;
 
   return AppBar(
-    leading: BackButton(),
+    leading: const BackButton(),
     backgroundColor: Colors.transparent,
     elevation: 0,
     actions: [
@@ -393,13 +559,13 @@ class ButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ElevatedButton(
         style: ElevatedButton.styleFrom(
-          shape: StadiumBorder(),
+          shape: const StadiumBorder(),
           onPrimary: Colors.white,
-          padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
         ),
         child: Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
           ),
         ),
@@ -412,7 +578,7 @@ class NumbersWidget extends StatelessWidget {
   Widget build(BuildContext context) => Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          buildButton(context, '4.8', 'Ranking'),
+          buildButton(context, '102', 'Post'),
           buildDivider(),
           buildButton(context, '35', 'Following'),
           buildDivider(),
@@ -421,14 +587,14 @@ class NumbersWidget extends StatelessWidget {
       );
   Widget buildDivider() => Container(
         height: 24,
-        child: VerticalDivider(
+        child: const VerticalDivider(
           color: Colors.white,
         ),
       );
 
   Widget buildButton(BuildContext context, String value, String text) =>
       MaterialButton(
-        padding: EdgeInsets.symmetric(vertical: 4),
+        padding: const EdgeInsets.symmetric(vertical: 4),
         onPressed: () {},
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         child: Column(
@@ -437,16 +603,16 @@ class NumbersWidget extends StatelessWidget {
           children: <Widget>[
             Text(
               value,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
                 color: Colors.white,
               ),
             ),
-            SizedBox(height: 2),
+            const SizedBox(height: 2),
             Text(
               text,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
@@ -457,32 +623,42 @@ class NumbersWidget extends StatelessWidget {
 }
 
 class SettingPage extends StatelessWidget {
+  Color testColor = Colors.red;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SettingsList(
-          physics: NeverScrollableScrollPhysics(),
-          sections: [
-            SettingsSection(
-              title: Text('Common'),
-              tiles: <SettingsTile>[
-                SettingsTile.navigation(
-                  leading: Icon(Icons.language),
-                  title: Text('Language'),
-                  value: Text('English'),
-                ),
-                SettingsTile.switchTile(
-                  onToggle: (value) {},
-                  initialValue: true,
-                  leading: Icon(Icons.format_paint),
-                  title: Text('Enable custom theme'),
-                ),
-              ],
-            ),
-          ],
+      floatingActionButton: buildFloating(),
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: const Text('Setting'),
+      ),
+      body: GridView.count(
+        physics: const NeverScrollableScrollPhysics(),
+        childAspectRatio: (3 / 1),
+        crossAxisCount: 2,
+        children: [for (var i = 0; i < 7; i++) TestContainer()],
+      ),
+    );
+  }
+
+  Widget TestContainer() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        width: 20,
+        height: 20,
+        decoration: BoxDecoration(
+          color: testColor,
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
+    );
+  }
+
+  FloatingActionButton buildFloating() {
+    return FloatingActionButton(
+      backgroundColor: testColor,
+      onPressed: () {},
     );
   }
 }
@@ -559,7 +735,7 @@ class _DetailPageState extends State<DetailPage> {
         elevation: 0,
         leading: IconButton(
             onPressed: () => Navigator.pop(context),
-            icon: Icon(Icons.arrow_back_ios)),
+            icon: const Icon(Icons.arrow_back_ios)),
       ),
       body: SingleChildScrollView(
         child: Stack(
@@ -580,9 +756,9 @@ class _DetailPageState extends State<DetailPage> {
                     children: [
                       Row(
                         children: [
-                          DelayedDisplay(
-                            delay: Duration(milliseconds: 500),
-                            child: Text(
+                          const DelayedDisplay(
+                            delay: const Duration(milliseconds: 500),
+                            child: const Text(
                               "Hi!",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -591,11 +767,11 @@ class _DetailPageState extends State<DetailPage> {
                               ),
                             ),
                           ),
-                          Spacer(),
+                          const Spacer(),
                           AnimatedSwitcher(
                             switchInCurve: Curves.elasticIn,
                             switchOutCurve: Curves.elasticOut,
-                            duration: Duration(milliseconds: 300),
+                            duration: const Duration(milliseconds: 300),
                             transitionBuilder: (child, animation) {
                               return ScaleTransition(
                                 child: child,
@@ -604,24 +780,24 @@ class _DetailPageState extends State<DetailPage> {
                             },
                             child: isFavorite
                                 ? IconButton(
-                                    key: ValueKey('0'),
+                                    key: const ValueKey('0'),
                                     onPressed: () {
                                       HapticFeedback.heavyImpact();
                                       favorite();
                                     },
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.favorite,
                                       color: Colors.red,
                                       size: 30,
                                     ),
                                   )
                                 : IconButton(
-                                    key: ValueKey('1'),
+                                    key: const ValueKey('1'),
                                     onPressed: () {
                                       HapticFeedback.heavyImpact();
                                       favorite();
                                     },
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.favorite_border,
                                       color: Colors.white,
                                       size: 30,
@@ -629,84 +805,9 @@ class _DetailPageState extends State<DetailPage> {
                                   ),
                           ),
                           IconButton(
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: Text("select stamp🚀"),
-                                      // content:
-                                      actions: <Widget>[
-                                        Column(
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                IconButton(
-                                                  onPressed: () {},
-                                                  icon: Icon(
-                                                    Icons.access_alarm_rounded,
-                                                    size: 50,
-                                                  ),
-                                                ),
-                                                IconButton(
-                                                  onPressed: () {},
-                                                  icon: Icon(
-                                                    Icons.access_alarm_rounded,
-                                                    size: 50,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                IconButton(
-                                                  onPressed: () {},
-                                                  icon: Icon(
-                                                    Icons.access_alarm_rounded,
-                                                    size: 50,
-                                                  ),
-                                                ),
-                                                IconButton(
-                                                  onPressed: () {},
-                                                  icon: Icon(
-                                                    Icons.access_alarm_rounded,
-                                                    size: 50,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                IconButton(
-                                                  onPressed: () {},
-                                                  icon: Icon(
-                                                    Icons.access_alarm_rounded,
-                                                    size: 50,
-                                                  ),
-                                                ),
-                                                IconButton(
-                                                  onPressed: () {},
-                                                  icon: Icon(
-                                                    Icons.access_alarm_rounded,
-                                                    size: 50,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    );
-                                  });
-                            },
-                            icon: Icon(
-                              Icons.face_outlined,
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.comment,
                               color: Colors.white,
                               size: 30,
                             ),
@@ -717,9 +818,9 @@ class _DetailPageState extends State<DetailPage> {
                                   context: context,
                                   isScrollControlled:
                                       true, //trueにしないと、Containerのheightが反映されない
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(15)),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: const BorderRadius.vertical(
+                                        top: const Radius.circular(15)),
                                   ),
                                   builder: (BuildContext context) {
                                     return Container(
@@ -727,7 +828,7 @@ class _DetailPageState extends State<DetailPage> {
                                     );
                                   });
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.more_vert,
                               color: Colors.white,
                               size: 30,
@@ -735,23 +836,23 @@ class _DetailPageState extends State<DetailPage> {
                           ),
                         ],
                       ),
-                      DelayedDisplay(
-                        delay: Duration(milliseconds: 600),
-                        child: Text(
+                      const DelayedDisplay(
+                        delay: const Duration(milliseconds: 600),
+                        child: const Text(
                           "2022/07/01",
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 35.0,
                             color: Colors.white,
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 60,
                       ),
-                      DelayedDisplay(
-                        delay: Duration(milliseconds: 800),
-                        child: Text(
+                      const DelayedDisplay(
+                        delay: const Duration(milliseconds: 800),
+                        child: const Text(
                           "comments",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -760,16 +861,16 @@ class _DetailPageState extends State<DetailPage> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Column(
                         children: [
-                          DelayedDisplay(
-                            delay: Duration(milliseconds: 1000),
+                          const DelayedDisplay(
+                            delay: const Duration(milliseconds: 1000),
                             child: Text(
                               "Hello everyone, my name is Beck. Some people find it hard to pronounce, so feel free to call me Be",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 35.0,
                                 color: Colors.white,
@@ -803,10 +904,10 @@ class _NotificationPageState extends State<NotificationPage>
   late TabController _tabController;
 
   List<Tab> tabs = [
-    Tab(
+    const Tab(
       text: 'All',
     ),
-    Tab(
+    const Tab(
       text: 'System',
     ),
   ];
@@ -823,13 +924,13 @@ class _NotificationPageState extends State<NotificationPage>
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text(
+        title: const Text(
           'Notifications',
           style: TextStyle(color: Colors.white),
         ),
         bottom: TabBar(
           splashFactory: NoSplash.splashFactory,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           isScrollable: true,
           tabs: tabs,
           controller: _tabController,
@@ -841,23 +942,23 @@ class _NotificationPageState extends State<NotificationPage>
       ),
       body: ListView.separated(
         itemCount: 100,
-        itemBuilder: ((context, index) => ListTile(
-              leading: CircleAvatar(
+        itemBuilder: ((context, index) => const ListTile(
+              leading: const CircleAvatar(
                 radius: 15,
-                backgroundImage: NetworkImage(
+                backgroundImage: const NetworkImage(
                     'https://images.unsplash.com/photo-1473625247510-8ceb1760943f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1411&q=80'),
               ),
-              title: Text(
+              title: const Text(
                 'Taisei Onishi favored it.',
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               ),
-              subtitle: Text(
+              subtitle: const Text(
                 'The weather was nice and we visited a natural park to see koalas. ',
-                style: TextStyle(color: Colors.grey),
+                style: const TextStyle(color: Colors.grey),
               ),
             )),
         separatorBuilder: (BuildContext context, int index) {
-          return Divider(
+          return const Divider(
             color: Colors.grey,
           );
         },
