@@ -1,9 +1,27 @@
 import 'package:flutter/material.dart';
 
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: SingletonTest(),
+    );
+  }
+}
+
 class Singleton {
   // インスタンスをプライベートにして外部から参照できないようにする
   static final Singleton _instance = Singleton._internal();
-
   factory Singleton() {
     return _instance;
   }
@@ -12,11 +30,49 @@ class Singleton {
 }
 
 // view
-class SingletonTest extends StatelessWidget {
+class SingletonTest extends StatefulWidget {
+  const SingletonTest({Key? key}) : super(key: key);
+
+  @override
+  State<SingletonTest> createState() => _SingletonTestState();
+}
+
+class _SingletonTestState extends State<SingletonTest> {
+  late SingletonCar car1;
+  late SingletonCar car2;
+  @override
+  void initState() {
+    super.initState();
+    car1 = SingletonCar();
+    car2 = SingletonCar();
+    print(car1.hashCode);
+    print(car2.hashCode);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: Center(
+        child: Column(
+          children: [
+            Text(car1.hashCode.toString()),
+            Text(car2.hashCode.toString()),
+          ],
+        ),
+      ),
+    );
   }
+}
+
+class SingletonCar {
+  static final _instance = SingletonCar._internal();
+  factory SingletonCar() {
+    return _instance;
+  }
+  String name = '';
+  String number = '';
+
+  SingletonCar._internal();
 }
 
 // Userのシングルトンクラス
