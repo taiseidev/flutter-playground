@@ -15,7 +15,9 @@ import 'package:status_view/status_view.dart';
 import 'Dart:math' as math;
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -44,7 +46,7 @@ class _UiSmapleState extends State<UiSmaple>
 
   final List<Tab> tabs = <Tab>[
     const Tab(
-      text: 'Today',
+      text: 'Topic',
     ),
     const Tab(
       text: "TimeLine",
@@ -255,7 +257,7 @@ class MyClose extends StatefulWidget {
 class _MyCloseState extends State<MyClose> {
   double opacityLevel = 1.0;
   late int currentTab;
-  final bool _filter = true;
+  final bool _filter = false;
   late Timer _timer;
   @override
   void initState() {
