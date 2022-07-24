@@ -46,13 +46,13 @@ class _UiSmapleState extends State<UiSmaple>
 
   final List<Tab> tabs = <Tab>[
     const Tab(
-      text: 'Topic',
+      text: 'Home',
     ),
     const Tab(
       text: "TimeLine",
     ),
     const Tab(
-      text: "Favorite",
+      text: "Channels",
     ),
   ];
 
@@ -151,8 +151,8 @@ class _UiSmapleState extends State<UiSmaple>
         controller: _tabController,
         children: [
           TopicPage(),
-          MyClose(_tabController.index),
           FavoritePage(),
+          MyClose(_tabController.index),
         ],
       ),
       // floatingActionButton: FloatingActionButton(
@@ -167,17 +167,350 @@ class _UiSmapleState extends State<UiSmaple>
   }
 }
 
+class TodaysTopic extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton.extended(
+        backgroundColor: Colors.red,
+        onPressed: () {},
+        label: Text("Today's Topic"), //テキスト
+        icon: Icon(
+          Icons.lightbulb_outline,
+        ) //アイコン
+        );
+  }
+}
+
 class TopicPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         SizedBox(
-          height: 200,
+          height: 150,
         ),
-        Text(
-          'テスト',
-          style: TextStyle(color: Colors.white),
+        Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Stack(
+            alignment: Alignment.centerRight,
+            children: [
+              SizedBox(
+                height: 50,
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: 'Search',
+                    hintStyle: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                    ),
+                    fillColor: Color(0xff252d39),
+                    filled: true,
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                child: Container(
+                  width: 70,
+                  height: 47,
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(16),
+                      bottomRight: Radius.circular(16),
+                    ),
+                  ),
+                  child: Icon(Icons.filter_list),
+                ),
+              )
+            ],
+          ),
+        ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SizedBox(
+                width: 24,
+              ),
+              Zyan(
+                color: Color(0xff60ffaf),
+                title: '旅行',
+                url:
+                    'https://img.icons8.com/stickers/344/airplane-front-view.png',
+              ),
+              SizedBox(
+                width: 16,
+              ),
+              Zyan(
+                color: Color(0xff51ff51),
+                title: '教育',
+                url: 'https://img.icons8.com/stickers/344/school--v1.png',
+              ),
+              SizedBox(
+                width: 16,
+              ),
+              Zyan(
+                color: Color(0xffff7070),
+                title: '音楽',
+                url: 'https://img.icons8.com/stickers/344/musical-notes.png',
+              ),
+              SizedBox(
+                width: 16,
+              ),
+              Zyan(
+                color: Color(0xffd7dca9),
+                title: '料理',
+                url: 'https://img.icons8.com/stickers/344/ingredients.png',
+              ),
+              SizedBox(
+                width: 16,
+              ),
+              Zyan(
+                color: Color(0xff518de1),
+                title: '漫画',
+                url: 'https://img.icons8.com/stickers/344/comic-book.png',
+              ),
+              SizedBox(
+                width: 16,
+              ),
+              Zyan(
+                color: Color(0xffea50e9),
+                title: 'VLOG',
+                url: 'https://img.icons8.com/stickers/344/camcorder.png',
+              ),
+              SizedBox(
+                width: 16,
+              ),
+              Zyan(
+                color: Color(0xff3c39de),
+                title: 'ペット',
+                url: 'https://img.icons8.com/stickers/344/dog.png',
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 16),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              'その他',
+              style: TextStyle(
+                color: Colors.grey,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(width: 8),
+            Icon(
+              Icons.arrow_circle_right_outlined,
+              color: Colors.grey,
+            ),
+            SizedBox(
+              width: 24,
+            ),
+          ],
+        ),
+        SizedBox(height: 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 24,
+            ),
+            Text(
+              '再生数の多い動画',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        MostViewdList(),
+        SizedBox(height: 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 24,
+            ),
+            Text(
+              'チャンネル一覧',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SizedBox(
+                width: 16,
+              ),
+              for (var i = 0; i < imageUrl.length; i++)
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 8,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        // タップ時に振動
+                        HapticFeedback.heavyImpact();
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            fullscreenDialog: true,
+                            builder: (BuildContext context) => DetailPage(i),
+                          ),
+                        );
+                      },
+                      child: Hero(
+                        tag: i,
+                        child: Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: NetworkImage(imageUrl[i]),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+            ],
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class MostViewdList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Padding(
+        padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+        child: Row(
+          children: [
+            const CircleAvatar(
+              radius: 15,
+              backgroundImage: NetworkImage(
+                'https://images.unsplash.com/photo-1473625247510-8ceb1760943f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1411&q=80',
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Row(
+              children: [
+                const Text(
+                  'Taisei',
+                  style: TextStyle(color: Colors.white),
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Text(
+                  '# 旅行',
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child: Image.network(
+              imageUrl[2],
+              width: 240,
+              height: 180,
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          const Text(
+            '今注目の動画です',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Zyan extends StatelessWidget {
+  Zyan({
+    required this.url,
+    required this.title,
+    required this.color,
+  });
+  String url;
+  String title;
+  Color color;
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        Column(
+          children: [
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: color,
+              ),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Text(
+              title,
+              style: TextStyle(
+                color: Colors.grey,
+                fontWeight: FontWeight.bold,
+              ),
+            )
+          ],
+        ),
+        Image.network(
+          url,
+          width: 65,
+          height: 65,
         ),
       ],
     );
@@ -187,58 +520,79 @@ class TopicPage extends StatelessWidget {
 class FavoritePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemCount: 100,
-      itemBuilder: ((context, index) {
-        return ListTile(
-          title: Padding(
-            padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
-            child: Row(
+    return Scaffold(
+      backgroundColor: Colors.black,
+      floatingActionButton: TodaysTopic(),
+      body: ListView.separated(
+        itemCount: 100,
+        itemBuilder: ((context, index) {
+          return ListTile(
+            title: Padding(
+              padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+              child: Row(
+                children: [
+                  const CircleAvatar(
+                    radius: 15,
+                    backgroundImage: NetworkImage(
+                      'https://images.unsplash.com/photo-1473625247510-8ceb1760943f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1411&q=80',
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Row(
+                    children: [
+                      const Text(
+                        'Taisei',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        '# 旅行',
+                        style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            subtitle: Column(
               children: [
-                const CircleAvatar(
-                  radius: 15,
-                  backgroundImage: NetworkImage(
-                      'https://images.unsplash.com/photo-1473625247510-8ceb1760943f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1411&q=80'),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20.0),
+                  child: Image.network(
+                    imageUrl[index],
+                    width: 400,
+                    height: 300,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 const SizedBox(
-                  width: 10,
+                  height: 16,
                 ),
                 const Text(
-                  'Taisei',
-                  style: TextStyle(color: Colors.white),
+                  'A failure is like fertilizer. It stinks to be sure, but it makes things grow faster in the future.',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
-          ),
-          subtitle: Column(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20.0),
-                child: Image.network(
-                  imageUrl[index],
-                  fit: BoxFit.cover,
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              const Text(
-                'A failure is like fertilizer. It stinks to be sure, but it makes things grow faster in the future.',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        );
-      }),
-      separatorBuilder: (BuildContext context, int index) {
-        return const Divider(
-          color: Colors.grey,
-        );
-      },
+          );
+        }),
+        separatorBuilder: (BuildContext context, int index) {
+          return const Divider(
+            color: Colors.grey,
+          );
+        },
+      ),
     );
   }
 }
