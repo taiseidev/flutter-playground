@@ -150,7 +150,7 @@ class _UiSmapleState extends State<UiSmaple>
       body: TabBarView(
         controller: _tabController,
         children: [
-          MyClose(_tabController.index),
+          TopicPage(),
           MyClose(_tabController.index),
           FavoritePage(),
         ],
@@ -163,6 +163,23 @@ class _UiSmapleState extends State<UiSmaple>
       //   onPressed: () {},
       //   child: const Icon(Icons.camera),
       // ),
+    );
+  }
+}
+
+class TopicPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 200,
+        ),
+        Text(
+          'テスト',
+          style: TextStyle(color: Colors.white),
+        ),
+      ],
     );
   }
 }
@@ -629,18 +646,15 @@ class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: buildFloating(),
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: const Text('Setting'),
-      ),
-      body: GridView.count(
-        physics: const NeverScrollableScrollPhysics(),
-        childAspectRatio: (3 / 1),
-        crossAxisCount: 2,
-        children: [for (var i = 0; i < 7; i++) TestContainer()],
-      ),
-    );
+        backgroundColor: Colors.black,
+        body: Center(
+          child: Text(
+            '設定画面',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ));
   }
 
   Widget TestContainer() {
