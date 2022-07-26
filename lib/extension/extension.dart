@@ -21,10 +21,20 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// 文字列型を数字型に変換するextension
+extension ToIntEx on String {
+  int get toInt => int.parse(this);
+}
+
 class ExtensionSample extends StatelessWidget {
+  String sampleString = '1';
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: Center(
+        child: Text('${sampleString.toInt}'),
+      ),
+    );
   }
 }
 
