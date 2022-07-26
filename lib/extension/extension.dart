@@ -103,14 +103,17 @@ class Animals {
 
   toJson() {
     return {
-      'name': name,
+      'name': name.toJson(),
       'age': age,
     };
   }
 }
 
-void main() {
-  final animal = Animals(Name.cat, 12).toJson();
-  final jsonAnimal = json.decode(animal);
-  print(jsonAnimal);
+class EnumTest {
+  dynamic jsonAnimal = {};
+  void enumTest() {
+    final animal = Animals(Name.cat, 12).toJson();
+    jsonAnimal = json.decode(animal);
+    print(jsonAnimal);
+  }
 }
