@@ -73,4 +73,17 @@ void main() {
     print(list2); // [value: 3, value: 2]
     expect(list1 == list2, isTrue);
   });
+
+  test('list mutable shallow copy', () {
+    var list1 = [Mutable(1), Mutable(2)];
+    final list2 = list1;
+    list1 = List.of(list1);
+    list1[0] = Mutable(3);
+    // list1はシャローコピーされてから変更されたため、
+    // list2はその影響を受けない
+    // List.ofはコピー元に影響を与えない
+    print(list1); // [value: 3, value: 2]
+    print(list2); // [value: 1, value: 2]
+    expect(list1 == list2, isFalse);
+  });
 }
