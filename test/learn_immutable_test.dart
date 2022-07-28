@@ -41,4 +41,49 @@ void main() {
     const x4 = Immutable2(1);
     expect(identical(x3, x4), isTrue);
   });
+
+  test('immutable freezed', () {
+    var x1 = const Immutable3(1);
+    final x2 = x1;
+    // freezedを使うと、特定のフィールドを更新しつつ
+    // それ以外のフィールドの値は維持された
+    // 新しいオブジェクトとしてコピーするメソッドを自動生成してくれる
+    x1 = x1.copyWith(value: x1.value + 1);
+    expect(x1.value, 2);
+    expect(x2.value, 1);
+    expect(identical(x1, x2), isFalse);
+  });
+
+  test('freezed', () {
+    var x1 = ParentCompany(
+      childCompany: ChildCompany(
+        subcontractor: Subcontractor(name: ''),
+      ),
+    );
+    x1 = x1.copyWith.childCompany!.subcontractor!(name: '関係会社');
+    expect(x1.childCompany!.subcontractor!.name, '関係会社');
+  });
+
+  test('list mutable', () {
+    final list1 = [Mutable(1), Mutable(2)];
+    final list2 = list1;
+    list1[0] = Mutable(3);
+    // list1の変更にlist2が完全に巻き込まれる
+    print(list1); // [value: 3, value: 2]
+    print(list2); // [value: 3, value: 2]
+    expect(list1 == list2, isTrue);
+  });
+
+  test('list mutable shallow copy', () {
+    var list1 = [Mutable(1), Mutable(2)];
+    final list2 = list1;
+    list1 = List.of(list1);
+    list1[0] = Mutable(3);
+    // list1はシャローコピーされてから変更されたため、
+    // list2はその影響を受けない
+    // List.ofはコピー元に影響を与えない
+    print(list1); // [value: 3, value: 2]
+    print(list2); // [value: 1, value: 2]
+    expect(list1 == list2, isFalse);
+  });
 }
