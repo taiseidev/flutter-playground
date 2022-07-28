@@ -8,6 +8,21 @@ class Immutable3 with _$Immutable3 {
   const factory Immutable3(int value) = _Immutable3;
 }
 
+@freezed
+class ParentCompany with _$ParentCompany {
+  factory ParentCompany({ChildCompany? childCompany}) = _ParentCompany;
+}
+
+@freezed
+class ChildCompany with _$ChildCompany {
+  factory ChildCompany({Subcontractor? subcontractor}) = _ChildCompany;
+}
+
+@freezed
+class Subcontractor with _$Subcontractor {
+  factory Subcontractor({@Default('') String name}) = _Subcontractor;
+}
+
 class Mutable {
   Mutable(this.value);
   int value;

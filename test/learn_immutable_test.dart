@@ -55,11 +55,12 @@ void main() {
   });
 
   test('freezed', () {
-    var x1 = Immutable3(1);
-    final x2 = x1;
-    x1 = x1.copyWith(value: x1.value + 1);
-    expect(x1.value, 2);
-    expect(x2.value, 1);
-    expect(x1 == x2, isFalse);
+    var x1 = ParentCompany(
+      childCompany: ChildCompany(
+        subcontractor: Subcontractor(name: ''),
+      ),
+    );
+    x1 = x1.copyWith.childCompany!.subcontractor!(name: '関係会社');
+    expect(x1.childCompany!.subcontractor!.name, '関係会社');
   });
 }
