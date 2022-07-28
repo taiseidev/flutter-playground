@@ -1,4 +1,12 @@
 import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'learn_immutable.freezed.dart';
+
+@freezed
+class Immutable3 with _$Immutable3 {
+  const factory Immutable3(int value) = _Immutable3;
+}
 
 class Mutable {
   Mutable(this.value);
