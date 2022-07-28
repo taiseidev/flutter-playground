@@ -27,4 +27,18 @@ void main() {
     // 参照も違う
     expect(identical(x1, x2), isFalse);
   });
+
+  test('immutable const', () {
+    final x1 = Immutable2(1);
+    final x2 = Immutable2(1);
+    expect(identical(x1, x2), isFalse);
+
+    // constでインスタンスかしたときはコンパイル時に同一のインスタンスである事が保証されるため
+    // 下記のようにx3とx4は同じとみなされる。
+    // Widgetでconst SizedBoxを指定した場合は同じWidgetが再利用されるイメージ
+
+    const x3 = Immutable2(1);
+    const x4 = Immutable2(1);
+    expect(identical(x3, x4), isTrue);
+  });
 }
