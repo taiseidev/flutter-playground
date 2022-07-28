@@ -63,4 +63,14 @@ void main() {
     x1 = x1.copyWith.childCompany!.subcontractor!(name: '関係会社');
     expect(x1.childCompany!.subcontractor!.name, '関係会社');
   });
+
+  test('list mutable', () {
+    final list1 = [Mutable(1), Mutable(2)];
+    final list2 = list1;
+    list1[0] = Mutable(3);
+    // list1の変更にlist2が完全に巻き込まれる
+    print(list1); // [value: 3, value: 2]
+    print(list2); // [value: 3, value: 2]
+    expect(list1 == list2, isTrue);
+  });
 }
