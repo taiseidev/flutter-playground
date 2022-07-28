@@ -41,4 +41,25 @@ void main() {
     const x4 = Immutable2(1);
     expect(identical(x3, x4), isTrue);
   });
+
+  test('immutable freezed', () {
+    var x1 = const Immutable3(1);
+    final x2 = x1;
+    // freezedを使うと、特定のフィールドを更新しつつ
+    // それ以外のフィールドの値は維持された
+    // 新しいオブジェクトとしてコピーするメソッドを自動生成してくれる
+    x1 = x1.copyWith(value: x1.value + 1);
+    expect(x1.value, 2);
+    expect(x2.value, 1);
+    expect(identical(x1, x2), isFalse);
+  });
+
+  test('freezed', () {
+    var x1 = Immutable3(1);
+    final x2 = x1;
+    x1 = x1.copyWith(value: x1.value + 1);
+    expect(x1.value, 2);
+    expect(x2.value, 1);
+    expect(x1 == x2, isFalse);
+  });
 }
